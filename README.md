@@ -56,14 +56,15 @@ php artisan key:generate
 # Create the database (name must match .env -> gadget_tracking)
 mysql -u root -e "CREATE DATABASE gadget_tracking CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-# Create the tables
-php artisan migrate
+# Create the tables and load a few sample gadgets
+# (use plain "php artisan migrate" if you want to start empty)
+php artisan migrate --seed
 
 php artisan serve
 ```
 
-Open <http://127.0.0.1:8000>. The app loads directly on the dashboard (it starts
-empty, with no demo data); no login is required.
+Open <http://127.0.0.1:8000>. The app loads directly on the dashboard with a few
+sample gadgets; no login is required.
 
 ### Running under XAMPP (no `php artisan serve` needed)
 
@@ -116,7 +117,7 @@ Responses:
 app/Http/Controllers/      Dashboard, Phone, Location, Api/LocationReport
 app/Models/                User, Phone, LocationLog
 database/migrations/       phones, location_logs (+ Laravel defaults)
-database/seeders/          empty by default (no demo data)
+database/seeders/          sample gadgets and location trails
 resources/views/           Blade templates (layouts, gadgets, dashboard)
 public/css, public/js      app.css, app.js (map + geolocation)
 routes/web.php             all routes incl. the device API endpoint
@@ -124,7 +125,8 @@ routes/web.php             all routes incl. the device API endpoint
 
 ## Notes
 
-- Ships with **no demo data**; the database starts empty.
+- `php artisan migrate --seed` loads a few fictional sample gadgets with generic
+  location trails; plain `php artisan migrate` starts empty.
 - API keys are unique per gadget and can be regenerated from the gadget page if
   one is leaked.
 - Use this only to track devices you own or are authorised to track.
