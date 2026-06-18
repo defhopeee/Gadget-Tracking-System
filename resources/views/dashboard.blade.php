@@ -4,9 +4,9 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0">Dashboard</h1>
-        <a href="{{ route('phones.create') }}" class="btn btn-primary">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGadgetModal">
             <i class="bi bi-plus-lg"></i> Register a gadget
-        </a>
+        </button>
     </div>
 
     <div class="row g-3 mb-4">

@@ -4,9 +4,9 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0">Registered gadgets</h1>
-        <a href="{{ route('phones.create') }}" class="btn btn-primary">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGadgetModal">
             <i class="bi bi-plus-lg"></i> Add gadget
-        </a>
+        </button>
     </div>
 
     @if ($phones->isEmpty())
@@ -14,9 +14,9 @@
             <div class="card-body text-center py-5">
                 <div class="display-1 text-muted"><i class="bi bi-cpu"></i></div>
                 <p class="lead text-muted">You haven't registered any gadgets yet.</p>
-                <a href="{{ route('phones.create') }}" class="btn btn-primary">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGadgetModal">
                     <i class="bi bi-plus-lg"></i> Register your first gadget
-                </a>
+                </button>
             </div>
         </div>
     @else
@@ -55,9 +55,6 @@
                                 <td class="text-end">
                                     <a href="{{ route('phones.show', $phone) }}" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-geo-alt"></i> Track
-                                    </a>
-                                    <a href="{{ route('phones.edit', $phone) }}" class="btn btn-sm btn-outline-secondary">
-                                        <i class="bi bi-pencil"></i>
                                     </a>
                                 </td>
                             </tr>

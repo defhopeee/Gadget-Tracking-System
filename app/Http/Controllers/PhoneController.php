@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Phone;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class PhoneController extends Controller
@@ -23,14 +24,18 @@ class PhoneController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->validatePhone($request);
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput()->with('open_modal', 'addGadgetModal');
+        }
+
+        $data = $validator->validated();
         $data['user_id'] = $this->defaultUserId();
 
         $phone = Phone::create($data);
 
-        return redirect()
-            ->route('phones.show', $phone)
-            ->with('status', 'Gadget registered. Its tracking API key is shown below.');
+        return redirect()->route('phones.show', $phone)->with('status', 'Gadget added.');
     }
 
     public function show(Phone $phone)
@@ -39,11 +44,11 @@ class PhoneController extends Controller
 
         $points = $phone->locations
             ->map(fn ($l) => [
-                'lat'   => (float) $l->latitude,
-                'lng'   => (float) $l->longitude,
-                'label' => $l->label,
-                'time'  => $l->created_at->toDayDateTimeString(),
-                'source'=> $l->source,
+                'lat'    => (float) $l->latitude,
+                'lng'    => (float) $l->longitude,
+                'label'  => $l->label,
+                'time'   => $l->created_at->toDayDateTimeString(),
+                'source' => $l->source,
             ])
             ->values();
 
@@ -57,20 +62,22 @@ class PhoneController extends Controller
 
     public function update(Request $request, Phone $phone)
     {
-        $phone->update($this->validatePhone($request));
+        $validator = Validator::make($request->all(), $this->rules());
 
-        return redirect()
-            ->route('phones.show', $phone)
-            ->with('status', 'Gadget details updated.');
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput()->with('open_modal', 'editGadgetModal');
+        }
+
+        $phone->update($validator->validated());
+
+        return redirect()->route('phones.show', $phone)->with('status', 'Gadget updated.');
     }
 
     public function destroy(Phone $phone)
     {
         $phone->delete();
 
-        return redirect()
-            ->route('phones.index')
-            ->with('status', 'Gadget and its location history removed.');
+        return redirect()->route('phones.index')->with('status', 'Gadget and its location history removed.');
     }
 
     public function regenerateKey(Phone $phone)
@@ -96,17 +103,15 @@ class PhoneController extends Controller
         return $user->id;
     }
 
-    private function validatePhone(Request $request): array
+    private function rules(): array
     {
-        return $request->validate([
+        return [
             'label'        => ['required', 'string', 'max:100'],
             'type'         => ['required', 'in:' . implode(',', array_keys(Phone::TYPES))],
-            'brand'        => ['nullable', 'string', 'max:60'],
-            'model'        => ['nullable', 'string', 'max:60'],
             'imei'         => ['nullable', 'string', 'max:32'],
             'phone_number' => ['nullable', 'string', 'max:32'],
             'owner_name'   => ['nullable', 'string', 'max:100'],
             'status'       => ['required', 'in:active,inactive,lost,stolen,recovered'],
-        ]);
+        ];
     }
 }
