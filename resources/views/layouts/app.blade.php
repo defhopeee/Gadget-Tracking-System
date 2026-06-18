@@ -32,13 +32,6 @@
                        href="{{ route('phones.index') }}"><i class="bi bi-cpu"></i> Gadgets</a>
                 </li>
             </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addGadgetModal">
-                        <i class="bi bi-plus-lg"></i> Add gadget
-                    </button>
-                </li>
-            </ul>
         </div>
     </div>
 </nav>
