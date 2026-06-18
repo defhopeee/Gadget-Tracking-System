@@ -48,7 +48,7 @@
                 <div class="table-responsive">
                     <table class="table table-sm table-hover align-middle mb-0">
                         <thead class="table-light">
-                            <tr><th>When</th><th>Latitude</th><th>Longitude</th><th>Source</th><th>Battery</th><th></th></tr>
+                            <tr><th>When</th><th>Latitude</th><th>Longitude</th><th>Source</th><th>Battery</th></tr>
                         </thead>
                         <tbody>
                             @forelse ($phone->locations as $log)
@@ -58,16 +58,9 @@
                                     <td>{{ number_format($log->longitude, 6) }}</td>
                                     <td><span class="badge bg-light text-dark border">{{ $log->source }}</span></td>
                                     <td>{{ $log->battery !== null ? $log->battery . '%' : 'Not set' }}</td>
-                                    <td class="text-end">
-                                        <button type="button" class="btn btn-sm btn-link text-danger p-0 js-del-loc"
-                                                data-action="{{ route('locations.destroy', [$phone, $log]) }}"
-                                                data-bs-toggle="modal" data-bs-target="#deleteLocationModal">
-                                            <i class="bi bi-x-lg"></i>
-                                        </button>
-                                    </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="6" class="text-center text-muted py-4">No locations recorded yet.</td></tr>
+                                <tr><td colspan="5" class="text-center text-muted py-4">No locations recorded yet.</td></tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -218,23 +211,4 @@
         </div>
     </div>
 
-    {{-- Delete location modal (shared; action set by JS) --}}
-    <div class="modal fade" id="deleteLocationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle"></i> Delete location</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">Remove this location entry from the history?</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <form method="POST" id="delLocForm" action="">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger"><i class="bi bi-trash"></i> Delete</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection

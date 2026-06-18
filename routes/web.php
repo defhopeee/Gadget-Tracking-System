@@ -19,7 +19,6 @@ Route::delete('/gadgets/{phone}', [PhoneController::class, 'destroy'])->name('ph
 Route::post('/gadgets/{phone}/regeneratekey', [PhoneController::class, 'regenerateKey'])->name('phones.regeneratekey');
 
 Route::post('/gadgets/{phone}/locations', [LocationController::class, 'store'])->name('locations.store');
-Route::delete('/gadgets/{phone}/locations/{location}', [LocationController::class, 'destroy'])->name('locations.destroy');
 
 // Device reporting API (authenticated by the per-gadget API key, no session).
 Route::post('/api/reportlocation', [LocationReportController::class, 'report'])->name('api.reportlocation');

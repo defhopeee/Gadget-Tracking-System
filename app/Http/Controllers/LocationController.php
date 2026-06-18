@@ -45,11 +45,4 @@ class LocationController extends Controller
 
         return back()->with('status', 'Location recorded.');
     }
-
-    public function destroy(Phone $phone, $location)
-    {
-        $phone->locations()->whereKey($location)->delete();
-
-        return back()->with('status', 'Location entry deleted.');
-    }
 }

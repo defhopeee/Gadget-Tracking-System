@@ -125,14 +125,6 @@
             if (watchId === null) startLive(live); else stopLive(live);
         });
 
-        // Shared "delete location" confirmation modal: set the form action.
-        document.querySelectorAll('.js-del-loc').forEach(function (b) {
-            b.addEventListener('click', function () {
-                var form = document.getElementById('delLocForm');
-                if (form) form.action = b.getAttribute('data-action');
-            });
-        });
-
         // Auto-dismissing toast.
         var t = document.getElementById('flashToast');
         if (t && window.bootstrap) { new bootstrap.Toast(t).show(); }
