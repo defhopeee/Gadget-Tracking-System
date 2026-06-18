@@ -1,4 +1,4 @@
-# Phone Tracking System
+# Gadget Tracking System
 
 A web application for keeping track of a fleet of **gadgets** — phones,
 tablets, laptops, smartwatches, GPS trackers, cameras and more — including
@@ -49,8 +49,8 @@ CSS/JS are loaded from a CDN, so **no Node/npm build step is required**.
 ### Install
 
 ```bash
-git clone https://github.com/defhopeee/Phone-Tracking-System.git
-cd Phone-Tracking-System
+git clone https://github.com/defhopeee/Gadget-Tracking-System.git
+cd Gadget-Tracking-System
 
 composer install
 cp .env.example .env
@@ -78,7 +78,7 @@ password: password
 The repo ships a root `.htaccess` + `index.php`, so once the folder is in
 `htdocs` and **Apache is running**, the app is served automatically — just open:
 
-<http://localhost/Projects/Phone%20Tracking%20System/>
+<http://localhost/Projects/Gadget%20Tracking%20System/>
 
 No directory listing, no `/public` in the URL, nothing to start manually.
 (Requires Apache's `mod_rewrite`, which is enabled by default in XAMPP.)

@@ -1,4 +1,4 @@
-/* Phone Tracking System — front-end behaviour */
+/* Gadget Tracking System — front-end behaviour */
 (function () {
     'use strict';
 
