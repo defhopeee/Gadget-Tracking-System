@@ -3,20 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Phone;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PhoneController extends Controller
 {
-    /** Ensure the phone belongs to the current user. */
-    private function authorizePhone(Phone $phone): void
-    {
-        abort_unless($phone->user_id === Auth::id(), 403);
-    }
-
     public function index()
     {
-        $phones = Auth::user()->phones()->with('latestLocation')->latest()->get();
+        $phones = Phone::with('latestLocation')->latest()->get();
 
         return view('phones.index', compact('phones'));
     }
@@ -29,19 +24,17 @@ class PhoneController extends Controller
     public function store(Request $request)
     {
         $data = $this->validatePhone($request);
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = $this->defaultUserId();
 
         $phone = Phone::create($data);
 
         return redirect()
             ->route('phones.show', $phone)
-            ->with('status', 'Phone registered. Its tracking API key is shown below.');
+            ->with('status', 'Gadget registered. Its tracking API key is shown below.');
     }
 
     public function show(Phone $phone)
     {
-        $this->authorizePhone($phone);
-
         $phone->load(['locations' => fn ($q) => $q->limit(100)]);
 
         $points = $phone->locations
@@ -59,47 +52,55 @@ class PhoneController extends Controller
 
     public function edit(Phone $phone)
     {
-        $this->authorizePhone($phone);
-
         return view('phones.edit', compact('phone'));
     }
 
     public function update(Request $request, Phone $phone)
     {
-        $this->authorizePhone($phone);
-
         $phone->update($this->validatePhone($request));
 
         return redirect()
             ->route('phones.show', $phone)
-            ->with('status', 'Phone details updated.');
+            ->with('status', 'Gadget details updated.');
     }
 
     public function destroy(Phone $phone)
     {
-        $this->authorizePhone($phone);
-
         $phone->delete();
 
         return redirect()
             ->route('phones.index')
-            ->with('status', 'Phone and its location history removed.');
+            ->with('status', 'Gadget and its location history removed.');
     }
 
     public function regenerateKey(Phone $phone)
     {
-        $this->authorizePhone($phone);
-
         $phone->update(['api_key' => Phone::generateApiKey()]);
 
         return back()->with('status', 'A new API key has been generated.');
+    }
+
+    /** Owner for newly registered gadgets while authentication is disabled. */
+    private function defaultUserId(): int
+    {
+        $user = User::query()->oldest('id')->first();
+
+        if (! $user) {
+            $user = User::create([
+                'name'     => 'Owner',
+                'email'    => 'owner@example.com',
+                'password' => Str::random(32),
+            ]);
+        }
+
+        return $user->id;
     }
 
     private function validatePhone(Request $request): array
     {
         return $request->validate([
             'label'        => ['required', 'string', 'max:100'],
-            'type'         => ['required', 'in:' . implode(',', array_keys(\App\Models\Phone::TYPES))],
+            'type'         => ['required', 'in:' . implode(',', array_keys(Phone::TYPES))],
             'brand'        => ['nullable', 'string', 'max:60'],
             'model'        => ['nullable', 'string', 'max:60'],
             'imei'         => ['nullable', 'string', 'max:32'],

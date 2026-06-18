@@ -5,14 +5,14 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0">Dashboard</h1>
         <a href="{{ route('phones.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Register a phone
+            <i class="bi bi-plus-lg"></i> Register a gadget
         </a>
     </div>
 
     <div class="row g-3 mb-4">
         @php
             $cards = [
-                ['Total devices', $stats['total'], 'phone', 'primary'],
+                ['Total gadgets', $stats['total'], 'cpu', 'primary'],
                 ['Active', $stats['active'], 'check-circle', 'success'],
                 ['Lost', $stats['lost'], 'question-circle', 'warning'],
                 ['Stolen', $stats['stolen'], 'shield-exclamation', 'danger'],

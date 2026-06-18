@@ -58,7 +58,7 @@
                                     <td>{{ number_format($log->latitude, 6) }}</td>
                                     <td>{{ number_format($log->longitude, 6) }}</td>
                                     <td><span class="badge bg-light text-dark border">{{ $log->source }}</span></td>
-                                    <td>{{ $log->battery !== null ? $log->battery . '%' : '—' }}</td>
+                                    <td>{{ $log->battery !== null ? $log->battery . '%' : 'Not set' }}</td>
                                     <td class="text-end">
                                         <form method="POST" action="{{ route('locations.destroy', [$phone, $log]) }}"
                                               onsubmit="return confirm('Delete this location entry?')">
@@ -126,8 +126,8 @@
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white fw-semibold"><i class="bi bi-info-circle"></i> Details</div>
                 <ul class="list-group list-group-flush small">
-                    <li class="list-group-item d-flex justify-content-between"><span class="text-muted">IMEI</span><span>{{ $phone->imei ?: '—' }}</span></li>
-                    <li class="list-group-item d-flex justify-content-between"><span class="text-muted">Number</span><span>{{ $phone->phone_number ?: '—' }}</span></li>
+                    <li class="list-group-item d-flex justify-content-between"><span class="text-muted">IMEI</span><span>{{ $phone->imei ?: 'Not set' }}</span></li>
+                    <li class="list-group-item d-flex justify-content-between"><span class="text-muted">Number</span><span>{{ $phone->phone_number ?: 'Not set' }}</span></li>
                     <li class="list-group-item d-flex justify-content-between"><span class="text-muted">Registered</span><span>{{ $phone->created_at->toFormattedDateString() }}</span></li>
                 </ul>
             </div>
@@ -148,12 +148,12 @@
                             <i class="bi bi-clipboard"></i>
                         </button>
                     </div>
-                    <pre class="api-snippet"><code>curl -X POST {{ url('/api/report-location') }} \
+                    <pre class="api-snippet"><code>curl -X POST {{ url('/api/reportlocation') }} \
   -H "X-Api-Key: {{ $phone->api_key }}" \
   -d "latitude=51.5074" \
   -d "longitude=-0.1278" \
   -d "battery=82"</code></pre>
-                    <form method="POST" action="{{ route('phones.regenerate-key', $phone) }}"
+                    <form method="POST" action="{{ route('phones.regeneratekey', $phone) }}"
                           onsubmit="return confirm('Generate a new key? The current key will stop working.')">
                         @csrf
                         <button class="btn btn-sm btn-outline-warning w-100">

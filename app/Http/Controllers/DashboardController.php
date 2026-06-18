@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\LocationLog;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Phone;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-
-        $phones = $user->phones()->with('latestLocation')->latest()->get();
+        $phones = Phone::with('latestLocation')->latest()->get();
 
         $stats = [
             'total'     => $phones->count(),
@@ -21,7 +19,7 @@ class DashboardController extends Controller
             'recovered' => $phones->where('status', 'recovered')->count(),
         ];
 
-        // Points for the overview map (latest known position of each phone).
+        // Points for the overview map (latest known position of each gadget).
         $points = $phones->filter(fn ($p) => $p->latestLocation)
             ->map(fn ($p) => [
                 'lat'    => (float) $p->latestLocation->latitude,
@@ -32,8 +30,7 @@ class DashboardController extends Controller
                 'time'   => $p->latestLocation->created_at->diffForHumans(),
             ])->values();
 
-        $recent = LocationLog::whereIn('phone_id', $phones->pluck('id'))
-            ->with('phone')
+        $recent = LocationLog::with('phone')
             ->latest()
             ->limit(10)
             ->get();

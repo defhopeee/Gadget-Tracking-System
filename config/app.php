@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Etc/GMT-3', // UTC+3 (Etc/GMT-3 is +3); corrects the 3-hour offset
 
     /*
     |--------------------------------------------------------------------------

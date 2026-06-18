@@ -12,9 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         // Devices report their location without a web session / CSRF token;
-        // they authenticate with their per-phone API key instead.
+        // they authenticate with their per-gadget API key instead.
         $middleware->validateCsrfTokens(except: [
-            'api/report-location',
+            'api/reportlocation',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

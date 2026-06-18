@@ -3,19 +3,19 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">Registered phones</h1>
+        <h1 class="h3 mb-0">Registered gadgets</h1>
         <a href="{{ route('phones.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Add phone
+            <i class="bi bi-plus-lg"></i> Add gadget
         </a>
     </div>
 
     @if ($phones->isEmpty())
         <div class="card border-0 shadow-sm">
             <div class="card-body text-center py-5">
-                <div class="display-1 text-muted"><i class="bi bi-phone"></i></div>
-                <p class="lead text-muted">You haven't registered any phones yet.</p>
+                <div class="display-1 text-muted"><i class="bi bi-cpu"></i></div>
+                <p class="lead text-muted">You haven't registered any gadgets yet.</p>
                 <a href="{{ route('phones.create') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-lg"></i> Register your first phone
+                    <i class="bi bi-plus-lg"></i> Register your first gadget
                 </a>
             </div>
         </div>
@@ -42,8 +42,8 @@
                                     </a>
                                     <div class="small text-muted">{{ $phone->typeLabel() }}</div>
                                 </td>
-                                <td class="text-muted">{{ trim($phone->brand . ' ' . $phone->model) ?: '—' }}</td>
-                                <td class="text-muted">{{ $phone->owner_name ?: '—' }}</td>
+                                <td class="text-muted">{{ trim($phone->brand . ' ' . $phone->model) ?: 'Not set' }}</td>
+                                <td class="text-muted">{{ $phone->owner_name ?: 'Not set' }}</td>
                                 <td><span class="badge bg-{{ $phone->statusColor() }}">{{ ucfirst($phone->status) }}</span></td>
                                 <td class="text-muted small">
                                     @if ($phone->latestLocation)

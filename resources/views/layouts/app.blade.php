@@ -15,11 +15,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-@auth
 <nav class="navbar navbar-expand-lg navbar-dark app-navbar">
     <div class="container">
         <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">
-            <i class="bi bi-phone-vibrate"></i> {{ config('app.name') }}
+            <i class="bi bi-cpu"></i> {{ config('app.name') }}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
             <span class="navbar-toggler-icon"></span>
@@ -32,35 +31,19 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('phones.*') ? 'active' : '' }}"
-                       href="{{ route('phones.index') }}"><i class="bi bi-phone"></i> Phones</a>
+                       href="{{ route('phones.index') }}"><i class="bi bi-cpu"></i> Gadgets</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="btn btn-light btn-sm me-2" href="{{ route('phones.create') }}">
-                        <i class="bi bi-plus-lg"></i> Add phone
+                    <a class="btn btn-light btn-sm" href="{{ route('phones.create') }}">
+                        <i class="bi bi-plus-lg"></i> Add gadget
                     </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle"></i> {{ auth()->user()->name }}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button class="dropdown-item" type="submit">
-                                    <i class="bi bi-box-arrow-right"></i> Log out
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-@endauth
 
 <main class="py-4">
     <div class="container">

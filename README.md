@@ -1,48 +1,44 @@
 # Gadget Tracking System
 
-A web application for keeping track of a fleet of **gadgets** — phones,
-tablets, laptops, smartwatches, GPS trackers, cameras and more — including
+A web application for keeping track of a fleet of **gadgets** (phones,
+tablets, laptops, smartwatches, GPS trackers, cameras and more), including
 their details, status (active, lost, stolen, recovered) and **last known
 location on a live map**. Built with **Laravel 12**, Blade, Bootstrap 5 and
 Leaflet/OpenStreetMap.
 
-> This is an **asset / "find-my-device" style tracker**: devices (or their
-> owners) report their own position to the server using a per-device API key.
-> Every account only ever sees the phones it has registered.
-
----
+> This is an asset / "find my device" style tracker: devices (or their
+> owners) report their own position to the server using a per gadget API key.
 
 ## Features
 
-- 🔐 **Authentication** – register / login / logout (Laravel session auth).
-- 📱 **Device registry** – CRUD for any gadget: label, **type** (phone, tablet,
-  laptop, smartwatch, GPS tracker, camera, other), brand, model, IMEI, number,
-  owner and status.
-- 🗺️ **Live map** – dashboard shows the latest position of every device;
-  each device page shows its full location trail (Leaflet + OpenStreetMap, no
-  API key needed).
-- 📍 **Location logging** – add positions manually, capture them from the
+- **Opens straight to the dashboard** (no login for now).
+- **Gadget registry**: add any gadget with a type (phone, tablet, laptop,
+  smartwatch, GPS tracker, camera, other), brand, model, IMEI, number, owner
+  and status.
+- **Live map**: the dashboard shows the latest position of every gadget; each
+  gadget page shows its full location trail (Leaflet + OpenStreetMap, no API
+  key needed).
+- **Location logging**: add positions manually, capture them from the
   browser's geolocation, or have the device check in automatically.
-- 🔑 **Device API key** – each phone gets a unique key it uses to POST its
+- **Device API key**: each gadget has a unique key it uses to POST its
   location to the reporting endpoint.
-- 📊 **Dashboard** – status counts and recent check-ins at a glance.
+- **Dashboard**: status counts and recent check-ins at a glance.
 
 ## Tech stack
 
-| Layer    | Choice                                   |
-|----------|------------------------------------------|
-| Backend  | PHP 8.2, Laravel 12                      |
-| Database | SQLite (default) — swap to MySQL easily  |
-| Frontend | Blade, Bootstrap 5, vanilla JS           |
-| Maps     | Leaflet + OpenStreetMap tiles            |
+| Layer    | Choice                                  |
+|----------|-----------------------------------------|
+| Backend  | PHP 8.2, Laravel 12                     |
+| Database | SQLite (default), MySQL ready           |
+| Frontend | Blade, Bootstrap 5, vanilla JS          |
+| Maps     | Leaflet + OpenStreetMap tiles           |
 
-CSS/JS are loaded from a CDN, so **no Node/npm build step is required**.
-
----
+CSS/JS load from a CDN, so **no Node/npm build step is required**.
 
 ## Getting started
 
 ### Requirements
+
 - PHP 8.2+ with `pdo_sqlite` (or `pdo_mysql`), `mbstring`, `openssl`
 - [Composer](https://getcomposer.org/)
 
@@ -62,28 +58,23 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-Open <http://127.0.0.1:8000>.
-
-A demo account is seeded:
-
-```
-email:    demo@example.com
-password: password
-```
-
-…or click **Create one** to register your own account.
+Open <http://127.0.0.1:8000>. The app loads directly on the dashboard with the
+seeded sample gadgets; no login is required.
 
 ### Running under XAMPP (no `php artisan serve` needed)
 
-The repo ships a root `.htaccess` + `index.php`, so once the folder is in
-`htdocs` and **Apache is running**, the app is served automatically — just open:
+The repo ships a root `.htaccess` and `index.php`, so once the folder is in
+`htdocs` and **Apache is running**, the app is served automatically. Just open:
 
 <http://localhost/Projects/Gadget%20Tracking%20System/>
 
 No directory listing, no `/public` in the URL, nothing to start manually.
-(Requires Apache's `mod_rewrite`, which is enabled by default in XAMPP.)
+(Requires Apache's `mod_rewrite`, enabled by default in XAMPP.)
 
----
+## Time zone
+
+The app is configured for UTC+3 (`config/app.php` uses `Etc/GMT-3`) so the
+timeline matches local time. Change that value to your own zone if needed.
 
 ## Using MySQL instead of SQLite
 
@@ -93,30 +84,28 @@ Create a database and update `.env`:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=phone_tracking
+DB_DATABASE=gadget_tracking
 DB_USERNAME=root
 DB_PASSWORD=
 ```
 
 Then run `php artisan migrate --seed`.
 
----
-
-## Device check-in API
+## Device check in API
 
 Devices report their position to a single endpoint, authenticating with the
-per-phone API key shown on each device's page.
+per gadget API key shown on each gadget's page.
 
-```
-POST /api/report-location
-Header:  X-Api-Key: <the phone's api key>   (or form field api_key)
+```text
+POST /api/reportlocation
+Header:  X-Api-Key: <the gadget's api key>   (or form field api_key)
 Body:    latitude, longitude, [accuracy], [battery], [label]
 ```
 
 Example:
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/report-location \
+curl -X POST http://127.0.0.1:8000/api/reportlocation \
   -H "X-Api-Key: YOUR_DEVICE_KEY" \
   -d "latitude=51.5074" \
   -d "longitude=-0.1278" \
@@ -125,36 +114,33 @@ curl -X POST http://127.0.0.1:8000/api/report-location \
 
 Responses:
 
-| Status | Meaning                          |
-|--------|----------------------------------|
-| 201    | Location recorded                |
-| 401    | No API key supplied              |
-| 403    | Unknown / invalid API key        |
-| 422    | Validation failed (bad coords)   |
-
----
+| Status | Meaning                        |
+|--------|--------------------------------|
+| 201    | Location recorded              |
+| 401    | No API key supplied            |
+| 403    | Unknown or invalid API key     |
+| 422    | Validation failed (bad coords) |
 
 ## Project layout
 
-```
-app/Http/Controllers/      Auth, Dashboard, Phone, Location, Api/LocationReport
+```text
+app/Http/Controllers/      Dashboard, Phone, Location, Api/LocationReport
 app/Models/                User, Phone, LocationLog
 database/migrations/       phones, location_logs (+ Laravel defaults)
-database/seeders/          demo user, sample phones & trails
-resources/views/           Blade templates (layouts, auth, phones, dashboard)
+database/seeders/          sample gadgets and trails
+resources/views/           Blade templates (layouts, gadgets, dashboard)
 public/css, public/js      app.css, app.js (map + geolocation)
 routes/web.php             all routes incl. the device API endpoint
 ```
 
-## Security notes
+## Notes
 
-- Each user can only view and manage their own phones (ownership is enforced in
-  every controller action).
-- API keys are unique per device and can be **regenerated** from the device page
-  if one is leaked.
-- Use this only to track devices **you own or are authorised to track**.
+- Authentication is disabled for now; the dashboard is the landing page and all
+  gadgets are visible. User accounts can be reintroduced later.
+- API keys are unique per gadget and can be regenerated from the gadget page if
+  one is leaked.
+- Use this only to track devices you own or are authorised to track.
 
 ## License
 
-MIT — see below. Use responsibly and only on devices you own or are authorised
-to track.
+MIT. Use responsibly and only on devices you own or are authorised to track.
