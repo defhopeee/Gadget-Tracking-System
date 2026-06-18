@@ -29,8 +29,8 @@ Leaflet/OpenStreetMap.
 | Layer    | Choice                                  |
 |----------|-----------------------------------------|
 | Backend  | PHP 8.2, Laravel 12                     |
-| Database | SQLite (default), MySQL ready           |
-| Frontend | Blade, Bootstrap 5, vanilla JS          |
+| Database | MySQL / MariaDB                         |
+| Frontend | HTML, CSS, JavaScript, Blade, Bootstrap |
 | Maps     | Leaflet + OpenStreetMap tiles           |
 
 CSS/JS load from a CDN, so **no Node/npm build step is required**.
@@ -39,7 +39,8 @@ CSS/JS load from a CDN, so **no Node/npm build step is required**.
 
 ### Requirements
 
-- PHP 8.2+ with `pdo_sqlite` (or `pdo_mysql`), `mbstring`, `openssl`
+- PHP 8.2+ with `pdo_mysql`, `mbstring`, `openssl`
+- MySQL or MariaDB (XAMPP bundles MariaDB)
 - [Composer](https://getcomposer.org/)
 
 ### Install
@@ -52,14 +53,17 @@ composer install
 cp .env.example .env
 php artisan key:generate
 
-# Create the database schema and demo data
-php artisan migrate --seed
+# Create the database (name must match .env -> gadget_tracking)
+mysql -u root -e "CREATE DATABASE gadget_tracking CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# Create the tables
+php artisan migrate
 
 php artisan serve
 ```
 
-Open <http://127.0.0.1:8000>. The app loads directly on the dashboard with the
-seeded sample gadgets; no login is required.
+Open <http://127.0.0.1:8000>. The app loads directly on the dashboard (it starts
+empty, with no demo data); no login is required.
 
 ### Running under XAMPP (no `php artisan serve` needed)
 
@@ -75,21 +79,6 @@ No directory listing, no `/public` in the URL, nothing to start manually.
 
 The app is configured for UTC+3 (`config/app.php` uses `Etc/GMT-3`) so the
 timeline matches local time. Change that value to your own zone if needed.
-
-## Using MySQL instead of SQLite
-
-Create a database and update `.env`:
-
-```dotenv
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=gadget_tracking
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-Then run `php artisan migrate --seed`.
 
 ## Device check in API
 
