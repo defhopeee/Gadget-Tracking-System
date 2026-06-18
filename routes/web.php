@@ -21,4 +21,7 @@ Route::post('/gadgets/{phone}/regeneratekey', [PhoneController::class, 'regenera
 Route::post('/gadgets/{phone}/locations', [LocationController::class, 'store'])->name('locations.store');
 
 // Device reporting API (authenticated by the per-gadget API key, no session).
-Route::post('/api/reportlocation', [LocationReportController::class, 'report'])->name('api.reportlocation');
+// Rate-limited to curb abuse and API-key guessing.
+Route::post('/api/reportlocation', [LocationReportController::class, 'report'])
+    ->middleware('throttle:60,1')
+    ->name('api.reportlocation');

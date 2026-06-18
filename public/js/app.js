@@ -7,6 +7,13 @@
         stolen: '#dc2626', recovered: '#0891b2'
     };
 
+    // Escape user-supplied text before putting it in HTML (popup labels etc.).
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
     function coloredIcon(color) {
         return L.divIcon({
             className: 'pts-pin',
@@ -29,9 +36,9 @@
         points.forEach(function (p) {
             var color = statusColors[p.status] || '#2563eb';
             var marker = L.marker([p.lat, p.lng], { icon: coloredIcon(color) }).addTo(map);
-            var html = '<strong>' + (p.label || 'Location') + '</strong>';
-            if (p.time) html += '<br><small>' + p.time + '</small>';
-            if (p.url) html += '<br><a href="' + p.url + '">Open</a>';
+            var html = '<strong>' + esc(p.label || 'Location') + '</strong>';
+            if (p.time) html += '<br><small>' + esc(p.time) + '</small>';
+            if (p.url) html += '<br><a href="' + encodeURI(p.url) + '">Open</a>';
             marker.bindPopup(html);
             markers.push(marker);
         });

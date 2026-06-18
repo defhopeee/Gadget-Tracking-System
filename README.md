@@ -127,7 +127,7 @@ Responses:
 app/Http/Controllers/      Dashboard, Phone, Location, Api/LocationReport
 app/Models/                User, Phone, LocationLog
 database/migrations/       phones, location_logs (+ Laravel defaults)
-database/seeders/          sample gadgets and trails
+database/seeders/          empty by default (no demo data)
 resources/views/           Blade templates (layouts, gadgets, dashboard)
 public/css, public/js      app.css, app.js (map + geolocation)
 routes/web.php             all routes incl. the device API endpoint
@@ -135,11 +135,30 @@ routes/web.php             all routes incl. the device API endpoint
 
 ## Notes
 
-- Authentication is disabled for now; the dashboard is the landing page and all
-  gadgets are visible. User accounts can be reintroduced later.
+- Ships with **no demo data**; the database starts empty.
 - API keys are unique per gadget and can be regenerated from the gadget page if
   one is leaked.
 - Use this only to track devices you own or are authorised to track.
+
+## Security status
+
+This is a demo/portfolio project, not a production service. What is in place:
+
+- Output is escaped (Blade auto-escaping, and map popups are escaped in JS) to
+  prevent stored XSS.
+- All web forms use CSRF tokens; Eloquent uses prepared statements (no SQL
+  injection); mass assignment is limited to validated fields.
+- The device API endpoint authenticates with a random per-gadget key and is
+  rate-limited.
+- No secrets are committed: `.env` and the SQLite database are git-ignored.
+
+Before any real-world use you MUST:
+
+- **Add authentication / multi-tenant access control.** As shipped there is no
+  login: anyone who can reach the site sees and edits every gadget. This is
+  intentional for the demo only.
+- Set `APP_DEBUG=false` and a strong `APP_KEY` in production, serve over HTTPS,
+  and add a privacy policy plus lawful consent for collecting location data.
 
 ## License
 
