@@ -1,0 +1,22 @@
+# Serve the Laravel app through Apache (XAMPP) without running `php artisan serve`
+# and without exposing "/public" in the URL.
+#
+# Static assets physically live in public/, so requests for them are mapped
+# there; every other request is handled by the root front controller (index.php).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    Options -Indexes
+
+    # Map asset / framework paths to the real files inside public/.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(css/|js/|build/|storage/|vendor/|favicon\.ico|robots\.txt|.*\.(?:png|jpe?g|gif|svg|ico|webp|woff2?|ttf|map))(.*)$ public/$1$2 [L,NC]
+
+    # Send everything else to the root front controller.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_dir.c>
+    DirectoryIndex index.php
+</IfModule>

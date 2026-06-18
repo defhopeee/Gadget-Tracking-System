@@ -6,7 +6,17 @@
                value="{{ old('label', $phone->label ?? '') }}" placeholder="e.g. Work iPhone" required>
         @error('label') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
+        <label class="form-label">Device type</label>
+        <select name="type" class="form-select">
+            @foreach (\App\Models\Phone::TYPES as $key => [$tlabel, $ticon])
+                <option value="{{ $key }}" @selected(old('type', $phone->type ?? 'phone') === $key)>
+                    {{ $tlabel }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-3">
         <label class="form-label">Status</label>
         <select name="status" class="form-select">
             @foreach (['active','inactive','lost','stolen','recovered'] as $s)

@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('label');
+            $table->string('type')->default('phone'); // phone, tablet, laptop, smartwatch, gps_tracker, camera, other
             $table->string('brand')->nullable();
             $table->string('model')->nullable();
             $table->string('imei', 32)->nullable();

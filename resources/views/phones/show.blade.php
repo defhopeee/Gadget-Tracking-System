@@ -12,11 +12,13 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
         <div>
             <h1 class="h3 mb-1">
+                <i class="bi {{ $phone->typeIcon() }} text-muted"></i>
                 {{ $phone->label }}
                 <span class="badge bg-{{ $phone->statusColor() }} align-middle">{{ ucfirst($phone->status) }}</span>
             </h1>
             <div class="text-muted">
-                {{ trim($phone->brand . ' ' . $phone->model) ?: 'Unknown device' }}
+                {{ $phone->typeLabel() }}
+                &middot; {{ trim($phone->brand . ' ' . $phone->model) ?: 'Unknown device' }}
                 @if ($phone->owner_name) &middot; {{ $phone->owner_name }} @endif
             </div>
         </div>

@@ -38,8 +38,9 @@
                             <tr>
                                 <td>
                                     <a href="{{ route('phones.show', $phone) }}" class="fw-semibold text-decoration-none">
-                                        {{ $phone->label }}
+                                        <i class="bi {{ $phone->typeIcon() }} text-muted me-1"></i>{{ $phone->label }}
                                     </a>
+                                    <div class="small text-muted">{{ $phone->typeLabel() }}</div>
                                 </td>
                                 <td class="text-muted">{{ trim($phone->brand . ' ' . $phone->model) ?: '—' }}</td>
                                 <td class="text-muted">{{ $phone->owner_name ?: '—' }}</td>

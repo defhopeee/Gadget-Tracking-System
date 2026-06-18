@@ -1,6 +1,7 @@
 # Phone Tracking System
 
-A web application for keeping track of a fleet of phones / mobile devices —
+A web application for keeping track of a fleet of **gadgets** — phones,
+tablets, laptops, smartwatches, GPS trackers, cameras and more — including
 their details, status (active, lost, stolen, recovered) and **last known
 location on a live map**. Built with **Laravel 12**, Blade, Bootstrap 5 and
 Leaflet/OpenStreetMap.
@@ -14,7 +15,8 @@ Leaflet/OpenStreetMap.
 ## Features
 
 - 🔐 **Authentication** – register / login / logout (Laravel session auth).
-- 📱 **Device registry** – CRUD for phones: label, brand, model, IMEI, number,
+- 📱 **Device registry** – CRUD for any gadget: label, **type** (phone, tablet,
+  laptop, smartwatch, GPS tracker, camera, other), brand, model, IMEI, number,
   owner and status.
 - 🗺️ **Live map** – dashboard shows the latest position of every device;
   each device page shows its full location trail (Leaflet + OpenStreetMap, no
@@ -71,11 +73,15 @@ password: password
 
 …or click **Create one** to register your own account.
 
-### Running under XAMPP
+### Running under XAMPP (no `php artisan serve` needed)
 
-This project lives in `htdocs`, so you can also browse it through Apache. Point
-your virtual host / browser at the **`public/`** directory (Laravel's web root),
-e.g. <http://localhost/Projects/Phone%20Tracking%20System/public>.
+The repo ships a root `.htaccess` + `index.php`, so once the folder is in
+`htdocs` and **Apache is running**, the app is served automatically — just open:
+
+<http://localhost/Projects/Phone%20Tracking%20System/>
+
+No directory listing, no `/public` in the URL, nothing to start manually.
+(Requires Apache's `mod_rewrite`, which is enabled by default in XAMPP.)
 
 ---
 

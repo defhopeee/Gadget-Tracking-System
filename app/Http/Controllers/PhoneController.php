@@ -99,6 +99,7 @@ class PhoneController extends Controller
     {
         return $request->validate([
             'label'        => ['required', 'string', 'max:100'],
+            'type'         => ['required', 'in:' . implode(',', array_keys(\App\Models\Phone::TYPES))],
             'brand'        => ['nullable', 'string', 'max:60'],
             'model'        => ['nullable', 'string', 'max:60'],
             'imei'         => ['nullable', 'string', 'max:32'],

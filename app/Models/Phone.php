@@ -7,9 +7,21 @@ use Illuminate\Support\Str;
 
 class Phone extends Model
 {
+    /** Supported gadget types: key => [label, Bootstrap icon name]. */
+    public const TYPES = [
+        'phone'       => ['Phone', 'phone'],
+        'tablet'      => ['Tablet', 'tablet'],
+        'laptop'      => ['Laptop', 'laptop'],
+        'smartwatch'  => ['Smartwatch', 'smartwatch'],
+        'gps_tracker' => ['GPS tracker', 'geo-alt'],
+        'camera'      => ['Camera', 'camera'],
+        'other'       => ['Other gadget', 'cpu'],
+    ];
+
     protected $fillable = [
         'user_id',
         'label',
+        'type',
         'brand',
         'model',
         'imei',
@@ -50,6 +62,16 @@ class Phone extends Model
     public function latestLocation()
     {
         return $this->hasOne(LocationLog::class)->latestOfMany();
+    }
+
+    public function typeLabel(): string
+    {
+        return self::TYPES[$this->type][0] ?? ucfirst((string) $this->type);
+    }
+
+    public function typeIcon(): string
+    {
+        return 'bi-' . (self::TYPES[$this->type][1] ?? 'cpu');
     }
 
     public function statusColor(): string

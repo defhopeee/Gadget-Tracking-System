@@ -21,19 +21,24 @@ class DatabaseSeeder extends Seeder
         // A few sample devices with a small location trail each.
         $samples = [
             [
-                'label' => 'Work iPhone', 'brand' => 'Apple', 'model' => 'iPhone 15',
+                'label' => 'Work iPhone', 'type' => 'phone', 'brand' => 'Apple', 'model' => 'iPhone 15',
                 'status' => 'active', 'owner_name' => 'Demo User',
                 'trail' => [[51.5074, -0.1278], [51.5099, -0.1180], [51.5145, -0.1010]],
             ],
             [
-                'label' => 'Field Tablet', 'brand' => 'Samsung', 'model' => 'Galaxy Tab S9',
+                'label' => 'Field Tablet', 'type' => 'tablet', 'brand' => 'Samsung', 'model' => 'Galaxy Tab S9',
                 'status' => 'lost', 'owner_name' => 'Field Team',
                 'trail' => [[40.7128, -74.0060], [40.7300, -73.9950]],
             ],
             [
-                'label' => 'Spare Pixel', 'brand' => 'Google', 'model' => 'Pixel 8',
-                'status' => 'recovered', 'owner_name' => 'Demo User',
-                'trail' => [[48.8566, 2.3522]],
+                'label' => 'Dev Laptop', 'type' => 'laptop', 'brand' => 'Dell', 'model' => 'XPS 13',
+                'status' => 'active', 'owner_name' => 'Demo User',
+                'trail' => [[52.5200, 13.4050]],
+            ],
+            [
+                'label' => 'Fleet GPS Tag', 'type' => 'gps_tracker', 'brand' => 'Tile', 'model' => 'Pro',
+                'status' => 'recovered', 'owner_name' => 'Logistics',
+                'trail' => [[48.8566, 2.3522], [48.8606, 2.3376]],
             ],
         ];
 
